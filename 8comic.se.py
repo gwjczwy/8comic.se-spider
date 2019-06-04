@@ -16,7 +16,7 @@ def getIndexUrl(url):   #获取一话中所有图片URL  如:http://8comic.se/14
  url1=pageImgUrl.split('001.')[0]
  url2=pageImgUrl.split('001.')[1]
  li=[]
- for i in range(10):
+ for i in range(indexNum):
   li.append(url1+"%03d"%(i+1)+'.'+url2)
  return li
 
