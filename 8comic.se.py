@@ -1,18 +1,17 @@
 import requests
 from bs4 import BeautifulSoup as bs
 import os
-
-def getPartUrlList(url):  #»ñÈ¡Ò»²¿Âş»­µÄÃ¿Ò»»°µÄURL
+def getPartUrlList(url):  #è·å–ä¸€éƒ¨æ¼«ç”»çš„æ¯ä¸€è¯çš„URL
  al=bs(requests.get(url).text,'html.parser').select('.rich-content a')
  for i in range(len(al)):
   al[i]=al[i]['href']
  return al
 
-def getIndexUrl(url):   #»ñÈ¡Ò»»°ÖĞËùÓĞÍ¼Æ¬URL  Èç:http://8comic.se/144429/
+def getIndexUrl(url):   #è·å–ä¸€è¯ä¸­æ‰€æœ‰å›¾ç‰‡URL  å¦‚:http://8comic.se/144429/
  req=requests.get(url)
- #±¾»°×ÜÒ³Êı
+ #æœ¬è¯æ€»é¡µæ•°
  indexNum=int(bs(req.text,'html.parser').select('#infotxtb')[0].text.split('/')[1][1:-2])
- #±¾Ò³Âş»­Í¼Æ¬µØÖ·
+ #æœ¬é¡µæ¼«ç”»å›¾ç‰‡åœ°å€
  pageImgUrl=bs(req.text,'html.parser').select('img')[1]['src']
  url1=pageImgUrl.split('001.')[0]
  url2=pageImgUrl.split('001.')[1]
@@ -21,21 +20,34 @@ def getIndexUrl(url):   #»ñÈ¡Ò»»°ÖĞËùÓĞÍ¼Æ¬URL  Èç:http://8comic.se/144429/
   li.append(url1+"%03d"%(i+1)+'.'+url2)
  return li
 
-def downListToLocal(urlList,dir,rootDir='/root/downloads'):   #¶ÔURLÁĞ±í½øĞĞÏÂÔØ ²ÎÊıËµÃ÷:Í¼Æ¬ÍøÖ·,Âş»­Ãû+µÚ¼¸»°,ÏÂÔØÍ³Ò»±£´æÂ·¾¶(Ä¬ÈÏ/root/downloads) Í¼Æ¬»á±»ÏÂÔØµ½ Í³Ò»±£´æÂ·¾¶/Âş»­Ãû/µÚ¼¸»°/µÚ¼¸Ò³.jpg
+def downListToLocal(urlList,dir,rootDir=r'D:\\manga'):   #å¯¹URLåˆ—è¡¨è¿›è¡Œä¸‹è½½ å‚æ•°è¯´æ˜:å›¾ç‰‡ç½‘å€,æ¼«ç”»å+ç¬¬å‡ è¯,ä¸‹è½½ç»Ÿä¸€ä¿å­˜è·¯å¾„(é»˜è®¤/root/downloads) å›¾ç‰‡ä¼šè¢«ä¸‹è½½åˆ° ç»Ÿä¸€ä¿å­˜è·¯å¾„/æ¼«ç”»å/ç¬¬å‡ è¯/ç¬¬å‡ é¡µ.jpg
  for i in urlList:
-  req=requests.get(i)
+  headers={
+   'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+   'Accept-Encoding':'gzip, deflate',
+   'Accept-Language':'zh-CN,zh;q=0.9,en;q=0.8,zh-HK;q=0.7,zh-TW;q=0.6',
+   'Cache-Control':'max-age=0',
+   'Connection':'keep-alive',
+   'Cookie':'__cfduid=d0f621cbbccf2b4fa4df06c7a01e39f851559538909',
+   'Host':'pic.8comic.se',
+   'If-Modified-Since':'Sat, 05 Aug 2017 09:30:04 GMT',
+   'If-None-Match':'"5985901c-19d1f"',
+   'Upgrade-Insecure-Requests':'1',
+   'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
+  }
+  req=requests.get(i,headers=headers)
   if not os.path.exists(rootDir+'/'+dir):
-   print('Ã»ÓĞÎÄ¼ş¼Ğ,ÕıÔÚ´´½¨')
+   print('æ²¡æœ‰æ–‡ä»¶å¤¹,æ­£åœ¨åˆ›å»º')
    os.makedirs(rootDir+'/'+dir)
-   print('Ã»ÓĞÎÄ¼ş¼Ğ,´´½¨³É¹¦')
-  with open(rootDir+'/'+dir'/'+i.split('/')[-1],'wb') as file:
+   print('æ²¡æœ‰æ–‡ä»¶å¤¹,åˆ›å»ºæˆåŠŸ')
+  with open(rootDir+'/'+dir+'/'+i.split('/')[-1],'wb') as file:
    file.write(req.content)
-   print('ÒÑÏÂÔØÒ»Ò³')
+   print('å·²ä¸‹è½½ä¸€é¡µ')
 
-print('ÕıÔÚ»ñÈ¡×Ü»°Êı....')
+print('æ­£åœ¨è·å–æ€»è¯æ•°....')
 li=getPartUrlList('http://8comic.se/144428/')
 print('OK!!!')
 for i in range(len(li)):
- print('ÕıÔÚÏÂÔØµÚ'+"%03d"%i+'»°')
- downListToLocal(getIndexUrl(li[i]),'×â½èÅ®ÓÑ/'+"%3d"%(i+1)+'»°')
- print('ÕıÔÚÏÂÔØµÚ'+"%03d"%i+'»°')
+ print('æ­£åœ¨ä¸‹è½½ç¬¬'+"%03d"%(i+1)+'è¯')
+ downListToLocal(getIndexUrl(li[i]),'ç§Ÿå€Ÿå¥³å‹/'+"%03d"%(i+1)+'è¯')
+ print('æ­£åœ¨ä¸‹è½½ç¬¬'+"%03d"%(i+1)+'è¯')
