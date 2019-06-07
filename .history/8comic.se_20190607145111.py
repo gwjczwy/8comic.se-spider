@@ -41,24 +41,24 @@ def getIndexUrl(url):   #获取一话中所有图片URL  如:http://8comic.se/14
  return li
 
 def downListToLocal(urlList,dir,rootDir='/root/downloads'):   #对URL列表进行下载,下载一整话 参数说明:图片网址,漫画名+第几话,下载统一保存路径(默认/root/downloads) 图片会被下载到 统一保存路径/漫画名/第几话/漫画名第几话第几页.jpg
- for i in urlList:
-  headers={
+  for i in urlList:
+   headers={
   'User-Agent':'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.25 (KHTML, like Gecko) Chrome/12.0.706.0 Safari/534.25',
   'Referer':'http://8comic.se/'
-  }
+   }
   #文件绝对路径 如: path='/root/download/租借女友/001话/租借女友001话001.jpg'
-  absPath=rootDir+'/'+dir+'/'+dir.replace('/','')+i.split('/')[-1]
-  if os.path.exists(absPath) and os.path.getsize(absPath) > 10240: #如果文件存在并大于10k则认为重复任务,跳过下载
+  path=rootDir+'/'+dir+'/'+dir.replace('/','')+i.split('/')[-1]
+  if os.path.exists(path) and os.path.getsize(path) > 10240:
    print('文件已存在')
   else:
    req=requests.get(i,headers=headers)
-   if not os.path.exists(rootDir+'/'+dir):
-    print('没有文件夹,正在创建')
-    os.makedirs(rootDir+'/'+dir)
-    print('没有文件夹,创建成功')
-   with open(absPath,'wb') as file:
+  if not os.path.exists(rootDir+'/'+dir):
+   print('没有文件夹,正在创建')
+   os.makedirs(rootDir+'/'+dir)
+   print('没有文件夹,创建成功')
+   with open(path,'wb') as file:
     file.write(req.content)
-    print('已下载一页')
+   print('已下载一页')
 
 def downAllOfManga(): # 下载全部
   print('正在获取总话数....')

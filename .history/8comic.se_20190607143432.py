@@ -18,7 +18,7 @@ from time import sleep
 import os
 
 def getPartUrlList(url):  #获取一部漫画的每一话的URL
- al=bs(requests.get(url).text,'html.parser').select('td a')
+ al=bs(requests.get(url).text,'html.parser').select('.rich-content a')
  try:
   for i in range(len(al)):
    al[i]=al[i]['href']
@@ -44,21 +44,16 @@ def downListToLocal(urlList,dir,rootDir='/root/downloads'):   #对URL列表进�
  for i in urlList:
   headers={
   'User-Agent':'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.25 (KHTML, like Gecko) Chrome/12.0.706.0 Safari/534.25',
-  'Referer':'http://8comic.se/'
+  'Referer':'http://8comic.se/144428/'
   }
-  #文件绝对路径 如: path='/root/download/租借女友/001话/租借女友001话001.jpg'
-  absPath=rootDir+'/'+dir+'/'+dir.replace('/','')+i.split('/')[-1]
-  if os.path.exists(absPath) and os.path.getsize(absPath) > 10240: #如果文件存在并大于10k则认为重复任务,跳过下载
-   print('文件已存在')
-  else:
-   req=requests.get(i,headers=headers)
-   if not os.path.exists(rootDir+'/'+dir):
-    print('没有文件夹,正在创建')
-    os.makedirs(rootDir+'/'+dir)
-    print('没有文件夹,创建成功')
-   with open(absPath,'wb') as file:
-    file.write(req.content)
-    print('已下载一页')
+  req=requests.get(i,headers=headers)
+  if not os.path.exists(rootDir+'/'+dir):
+   print('没有文件夹,正在创建')
+   os.makedirs(rootDir+'/'+dir)
+   print('没有文件夹,创建成功')
+  with open(rootDir+'/'+dir+'/'+dir.replace('/','')+i.split('/')[-1],'wb') as file:
+   file.write(req.content)
+   print('已下载一页')
 
 def downAllOfManga(): # 下载全部
   print('正在获取总话数....')

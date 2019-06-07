@@ -47,8 +47,8 @@ def downListToLocal(urlList,dir,rootDir='/root/downloads'):   #对URL列表进�
   'Referer':'http://8comic.se/'
   }
   #文件绝对路径 如: path='/root/download/租借女友/001话/租借女友001话001.jpg'
-  absPath=rootDir+'/'+dir+'/'+dir.replace('/','')+i.split('/')[-1]
-  if os.path.exists(absPath) and os.path.getsize(absPath) > 10240: #如果文件存在并大于10k则认为重复任务,跳过下载
+  path=rootDir+'/'+dir+'/'+dir.replace('/','')+i.split('/')[-1]
+  if os.path.exists(path) and os.path.getsize(path) > 10240:
    print('文件已存在')
   else:
    req=requests.get(i,headers=headers)
@@ -56,7 +56,7 @@ def downListToLocal(urlList,dir,rootDir='/root/downloads'):   #对URL列表进�
     print('没有文件夹,正在创建')
     os.makedirs(rootDir+'/'+dir)
     print('没有文件夹,创建成功')
-   with open(absPath,'wb') as file:
+   with open(rootDir+'/'+dir+'/'+dir.replace('/','')+i.split('/')[-1],'wb') as file:
     file.write(req.content)
     print('已下载一页')
 
