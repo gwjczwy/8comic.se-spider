@@ -14,10 +14,10 @@
   -s S        下载指定话,如: -s "3 5 9-13 1" 注:要写在""中间,连续的几话要用 - 符号进行连接
   -new NEW    只下载最新的一话,默认为 n(禁用) .使用 -new y 开启
 ```
- 
+
 ### 例如:
 ```shell
-#下载全化
+#下载所有话
 python3 8comic.se.new.py -n 租借女友 -u http://8comic.se/144428
 #下载最新话
 python3 8comic.se.new.py -n 租借女友 -u http://8comic.se/144428 -new y
