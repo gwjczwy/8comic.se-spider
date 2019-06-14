@@ -21,7 +21,7 @@ def getPartUrlList(url):  #获取一部漫画的每一话的URL
  al=bs(requests.get(url).text,'html.parser').select('td a')
  try:
   for i in range(len(al)):
-   al[i]=[al[i].text , al[i]['href']]
+   al[i]=al[i]['href']
  except:
   print('发生错误,请确保传入的url页面包含该漫画的每一话连接.如 http://8comic.se/144428/')
   exit()
@@ -66,13 +66,13 @@ def downAllOfManga(): # 下载全部
   print('OK!!!')
   for i in range(len(li)):
     print('正在下载第'+"%03d"%i+'话')
-    downListToLocal(getIndexUrl(li[i][1]),args.n+'/'+"%03d"%(i+1)+li[i][0])
+    downListToLocal(getIndexUrl(li[i]),args.n+'/'+"%03d"%(i+1)+'话')
     print('完成下载第'+"%03d"%i+'话')
 
 def downLastOfManga(): # 下载最新话
   print('正在获取最后一话....')
   li=getPartUrlList(args.u)[-1]
-  downListToLocal(getIndexUrl(li[1]),args.n+li[0]+'_最新话')
+  downListToLocal(getIndexUrl(li),args.n+'_最新话')
   print('下载完成')
 
 def downSelectOfManga(selected): # 下载选择话
@@ -82,7 +82,7 @@ def downSelectOfManga(selected): # 下载选择话
   selected=[i-1 for i in selected]
   for i in selected:
     print('正在下载第'+"%03d"%i+'话')
-    downListToLocal(getIndexUrl(li[i][1]),args.n+'/'+"%03d"%(i+1)+li[i][0])
+    downListToLocal(getIndexUrl(li[i]),args.n+'/'+"%03d"%(i+1)+'话')
     print('完成下载第'+"%03d"%i+'话')
 
 if args.new=='y':

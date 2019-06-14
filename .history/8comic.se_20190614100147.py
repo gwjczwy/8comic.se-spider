@@ -14,7 +14,6 @@ if not args.u or not args.n:
 
 import requests
 from bs4 import BeautifulSoup as bs
-from time import sleep
 import os
 
 def getPartUrlList(url):  #获取一部漫画的每一话的URL
@@ -66,13 +65,13 @@ def downAllOfManga(): # 下载全部
   print('OK!!!')
   for i in range(len(li)):
     print('正在下载第'+"%03d"%i+'话')
-    downListToLocal(getIndexUrl(li[i][1]),args.n+'/'+"%03d"%(i+1)+li[i][0])
+    downListToLocal(getIndexUrl(li[i][1]),args.n+'/'+"%03d"%(i+1)+'话')
     print('完成下载第'+"%03d"%i+'话')
 
 def downLastOfManga(): # 下载最新话
   print('正在获取最后一话....')
   li=getPartUrlList(args.u)[-1]
-  downListToLocal(getIndexUrl(li[1]),args.n+li[0]+'_最新话')
+  downListToLocal(getIndexUrl(li[1]),args.n+'_最新话')
   print('下载完成')
 
 def downSelectOfManga(selected): # 下载选择话
@@ -82,7 +81,7 @@ def downSelectOfManga(selected): # 下载选择话
   selected=[i-1 for i in selected]
   for i in selected:
     print('正在下载第'+"%03d"%i+'话')
-    downListToLocal(getIndexUrl(li[i][1]),args.n+'/'+"%03d"%(i+1)+li[i][0])
+    downListToLocal(getIndexUrl(li[i][1]),args.n+'/'+"%03d"%(i+1)+'话')
     print('完成下载第'+"%03d"%i+'话')
 
 if args.new=='y':
