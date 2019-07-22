@@ -3,6 +3,15 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')# 更改默认编码
 
+import time
+from thread import hacker
+import queue
+q=queue.Queue(10)
+exitFlag=False  #退出标识
+threadNum=10  #线程数
+
+
+
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-u',help="指定URL 如 http://8comic.se/144428/ 该漫画的每话都将被下载")
@@ -46,24 +55,39 @@ def getIndexUrl(url):   #获取一话中所有图片URL  如:http://8comic.se/14
  return li
 
 def downListToLocal(urlList,dir,rootDir='/root/downloads'):   #对URL列表进行下载,下载一整话 参数说明:图片网址,漫画名+第几话,下载统一保存路径(默认/root/downloads) 图片会被下载到 统一保存路径/漫画名/第几话/漫画名第几话第几页.jpg
- for i in urlList:
-  headers={
-  'User-Agent':'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.25 (KHTML, like Gecko) Chrome/12.0.706.0 Safari/534.25',
-  'Referer':'http://8comic.se/'
-  }
+ for url in urlList:
   #文件绝对路径 如: path='/root/download/租借女友/001话/租借女友001话001.jpg'
-  absPath=rootDir+'/'+dir+'/'+dir.replace('/','')+i.split('/')[-1]
-  if os.path.exists(absPath) and os.path.getsize(absPath) > 10240: #如果文件存在并大于10k则认为重复任务,跳过下载
-   print("文件已存在")
-  else:
-   req=requests.get(i,headers=headers)
-   if not os.path.exists(rootDir+'/'+dir):
-    print(u"没有文件夹,正在创建")
-    os.makedirs(rootDir+'/'+dir)
-    print(u"没有文件夹,创建成功")
-   with open(absPath,'wb') as file:
-    file.write(req.content)
-    print(u"已下载一页")
+  absPath=rootDir+'/'+dir+'/'+dir.replace('/','')+url.split('/')[-1]
+  dir=rootDir+dir
+  q.put({'absPath':absPath,'dir':dir,'url':url})
+  # download(url,dir,absPath)
+
+def download(q):
+  while not exitFlag:
+    if not q.empty():
+      task=q.get()
+      url=task['url']
+      dir=task['dir']
+      absPath=['absPath']
+      headers={
+      'User-Agent':'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.25 (KHTML, like Gecko) Chrome/12.0.706.0 Safari/534.25',
+      'Referer':'http://8comic.se/'
+      }
+      if os.path.exists(absPath) and os.path.getsize(absPath) > 10240: #如果文件存在并大于10k则认为重复任务,跳过下载
+        print("文件已存在")
+      else:
+        req=requests.get(url,headers=headers)
+      if not os.path.exists(dir):
+        print(u"没有文件夹,正在创建")
+        os.makedirs(dir)
+        print(u"没有文件夹,创建成功")
+        with open(absPath,'wb') as file:
+          file.write(req.content)
+          print(u"已下载一页")
+    else:
+      time.sleep(0.5)
+
+
 
 def downAllOfManga(): # 下载全部
   print(u"正在获取总话数....")
@@ -93,7 +117,6 @@ def downSelectOfManga(selected): # 下载选择话
 if args.new=='y':
   downLastOfManga()
   print(u"最新话下载完成")
-  exit()
 elif args.s!='':
   # 这段代码将例如: -s "1 3-5 7 9 12-15"
   # 这样的参数处理成
@@ -111,8 +134,19 @@ elif args.s!='':
   # 处理完成,selected就是处理后的值
   downSelectOfManga(selected)
   print(u"最新话下载完成")
-  exit()
 else:
   downAllOfManga()
   print(u"全部下载完成")
-  exit()
+
+print('创建线程对象')
+# 创建线程对象
+threads=[]
+for i in range(threadNum):
+  thread=hacker('thread-'+str(i),q)
+  thread.start()
+  threads.append(thread)
+
+while not q.empty():
+  time.sleep(2)
+exitFlag=True
+print('主线程退出')
