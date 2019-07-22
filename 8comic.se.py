@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-u',help="指定URL 如 http://8comic.se/144428/ 该漫画的每话都将被下载")
@@ -23,7 +24,7 @@ def getPartUrlList(url):  #获取一部漫画的每一话的URL
   for i in range(len(al)):
    al[i]=[al[i].text , al[i]['href']]
  except:
-  print('发生错误,请确保传入的url页面包含该漫画的每一话连接.如 http://8comic.se/144428/')
+  print("发生错误,请确保传入的url页面包含该漫画的每一话连接.如 http://8comic.se/144428/")
   exit()
  return al
 
@@ -49,45 +50,45 @@ def downListToLocal(urlList,dir,rootDir='/root/downloads'):   #对URL列表进�
   #文件绝对路径 如: path='/root/download/租借女友/001话/租借女友001话001.jpg'
   absPath=rootDir+'/'+dir+'/'+dir.replace('/','')+i.split('/')[-1]
   if os.path.exists(absPath) and os.path.getsize(absPath) > 10240: #如果文件存在并大于10k则认为重复任务,跳过下载
-   print('文件已存在')
+   print("文件已存在")
   else:
    req=requests.get(i,headers=headers)
    if not os.path.exists(rootDir+'/'+dir):
-    print('没有文件夹,正在创建')
+    print("没有文件夹,正在创建")
     os.makedirs(rootDir+'/'+dir)
-    print('没有文件夹,创建成功')
+    print("没有文件夹,创建成功")
    with open(absPath,'wb') as file:
     file.write(req.content)
-    print('已下载一页')
+    print("已下载一页")
 
 def downAllOfManga(): # 下载全部
-  print('正在获取总话数....')
+  print("正在获取总话数....")
   li=getPartUrlList(args.u)
   print('OK!!!')
   for i in range(len(li)):
-    print('正在下载第'+"%03d"%i+'话')
+    print("正在下载第"+"%03d"%i+"话")
     downListToLocal(getIndexUrl(li[i][1]),args.n+'/'+"%03d"%(i+1)+li[i][0])
-    print('完成下载第'+"%03d"%i+'话')
+    print("完成下载第"+"%03d"%i+"话")
 
 def downLastOfManga(): # 下载最新话
-  print('正在获取最后一话....')
+  print("正在获取最后一话....")
   li=getPartUrlList(args.u)[-1]
-  downListToLocal(getIndexUrl(li[1]),args.n+li[0]+'_最新话')
-  print('下载完成')
+  downListToLocal(getIndexUrl(li[1]),args.n+li[0]+"_最新话")
+  print("下载完成")
 
 def downSelectOfManga(selected): # 下载选择话
-  print('正在获取指定章节....')
+  print("正在获取指定章节....")
   li=getPartUrlList(args.u)
   # 由于下表是从零开始的,selected中的所有值减一
   selected=[i-1 for i in selected]
   for i in selected:
-    print('正在下载第'+"%03d"%i+'话')
+    print("正在下载第"+"%03d"%i+"话")
     downListToLocal(getIndexUrl(li[i][1]),args.n+'/'+"%03d"%(i+1)+li[i][0])
-    print('完成下载第'+"%03d"%i+'话')
+    print("完成下载第"+"%03d"%i+"话")
 
 if args.new=='y':
   downLastOfManga()
-  print('最新话下载完成')
+  print("最新话下载完成")
   exit()
 elif args.s!='':
   # 这段代码将例如: -s "1 3-5 7 9 12-15"
@@ -105,9 +106,9 @@ elif args.s!='':
       selected.append(int(j[0]))
   # 处理完成,selected就是处理后的值
   downSelectOfManga(selected)
-  print('最新话下载完成')
+  print("最新话下载完成")
   exit()
 else:
   downAllOfManga()
-  print('全部下载完成')
+  print("全部下载完成")
   exit()
