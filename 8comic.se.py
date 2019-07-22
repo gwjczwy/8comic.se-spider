@@ -1,7 +1,7 @@
 # -*- coding: utf—8 -*-
 import sys
 reload(sys)
-sys.setdefaultencoding('utf-8')
+sys.setdefaultencoding('utf-8')# 更改默认编码
 
 import argparse
 parser = argparse.ArgumentParser()
