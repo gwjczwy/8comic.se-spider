@@ -1,7 +1,7 @@
 # -*- coding: utf—8 -*-
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')# 更改默认编码
+# import sys
+# reload(sys)
+# sys.setdefaultencoding('utf-8')# 更改默认编码
 
 import time
 from thread import hacker
