@@ -1,3 +1,9 @@
+# -*- coding: utf—8 -*-
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-u',help="指定URL 如 http://8comic.se/144428/ 该漫画的每话都将被下载")

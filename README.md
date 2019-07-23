@@ -18,9 +18,9 @@
 ### 例如:
 ```shell
 #下载所有话
-python3 8comic.se.new.py -n 租借女友 -u http://8comic.se/144428
+python3 8comic.se.new-Linux.py -n 租借女友 -u http://8comic.se/144428
 #下载最新话
-python3 8comic.se.new.py -n 租借女友 -u http://8comic.se/144428 -new y
+python3 8comic.se.new-Linux.py -n 租借女友 -u http://8comic.se/144428 -new y
 #下载指定话
-python3 8comic.se.new.py -n 租借女友 -u http://8comic.se/144428 -s "3 5 9-13 1"
+python3 8comic.se.new-Linux.py -n 租借女友 -u http://8comic.se/144428 -s "3 5 9-13 1"
 ```
