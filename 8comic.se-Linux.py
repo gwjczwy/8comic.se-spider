@@ -1,9 +1,3 @@
-# -*- coding: utf—8 -*-
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
-
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-u',help="指定URL 如 http://8comic.se/144428/ 该漫画的每话都将被下载")
@@ -141,7 +135,7 @@ else:
   print('全部添加完成')
 
 
-for i in range(threadNumber=10):
+for i in range(threadNumber):
     thread=hacker('thread'+str(i),q)
     thread.start()
     threads.append(thread)
