@@ -24,5 +24,3 @@ python3 8comic.se.new.py -n 租借女友 -u http://8comic.se/144428 -new y
 #下载指定话
 python3 8comic.se.new.py -n 租借女友 -u http://8comic.se/144428 -s "3 5 9-13 1"
 ```
-
-**由于网站限制爬虫,每爬取一张需要等待两秒**
