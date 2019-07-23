@@ -1,10 +1,9 @@
 # -*- coding: utf—8 -*-
-# import sys
-# reload(sys)
-# sys.setdefaultencoding('utf-8')# 更改默认编码
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')# 更改默认编码
 
 import time
-from thread import hacker
 import queue
 q=queue.Queue(10)
 exitFlag=False  #退出标识
@@ -138,7 +137,22 @@ else:
   downAllOfManga()
   print(u"全部下载完成")
 
+
+
 print('创建线程对象')
+
+import threading
+class hacker(threading.Thread):
+    def __init__(self,name,q):
+        threading.Thread.__init__(self)
+        self.name=name
+        self.q=q
+
+    def run(self):
+        print('开始线程',self.name)
+        download(q)
+        print('结束线程',self.name)
+        
 # 创建线程对象
 threads=[]
 for i in range(threadNum):
